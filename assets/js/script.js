@@ -4,6 +4,18 @@ var tasksToDoEl = document.querySelector("#tasks-to-do");
 
 var taskIdCounter = 0;
 
+var completeEditTask = function(taskName, taskType, taskId) {
+    var taskSelected = document.querySelector(".task-item[data-task-id='" + taskId + "']");
+
+    taskSelected.querySelector("h3.task-name").textContent = taskName;
+    taskSelected.querySelector("span.task-type").textContent = taskType;
+
+    alert("Task Updated!");
+
+    formEl.removeAttribute("data-task-id");
+    document.querySelector("#save-task").textContent = "Add Task";
+}
+
 
 var taskFormHandler = function(event){
     event.preventDefault();
@@ -15,14 +27,20 @@ var taskFormHandler = function(event){
         alert("You need fill out the task form!");
         return false;
     }
-    formEl.reset();
 
-    var taskDataObj = {
+    formEl.reset();
+    var isEdit = formEl.hasAttribute("data-task-id");
+    
+    if (isEdit){
+        var taskId = formEl.getAttribute("data-task-id");
+        completeEditTask(taskNameInput, taskTypeInput, taskId);
+    } else {
+        var taskDataObj = {
         name: taskNameInput,
         type: taskTypeInput
-    };
-    
-    createTaskEl(taskDataObj);
+        };
+        createTaskEl(taskDataObj);
+    }
 };
 
 var createTaskEl = function(taskDataObj) {
